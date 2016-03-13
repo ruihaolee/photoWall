@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<style type="text/css">
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			background-color: #fff;
+			color: #666;
+			font-size: 14px;
+			font-family: 'Avenir Next';
+			-webkit-font-smoothing: antialiased;
+		}
+		.wall{
+			width: 100%;
+			height: 75%;
+			background-color: #DDDDDD;
+			overflow: hidden;
+			position: absolute;
+			top: 12.5%;
+			/*垂直居中：(技巧)
+				position:absolute;
+				top:50%;
+				margin-top:-1/2 * height;
+			*/
+		}
+		.photo{
+			width:280px;
+			height: 340px;
+			position: absolute;
+			z-index: 1;
+			box-shadow: 0 0 1px rgba(0,0,0,0.01);
+			-webkit-perspective:800px;
+			transition:transform 0.3s;
+			/*其实和下面的preserve-3d 结合的在用，其实就是  视觉距离！*/
+			/* perspective取值为none或不设置，就没有真3D空间*/
+		}
+		.photo .side{
+			width: 100%;
+			height: 340px;
+			position: absolute;
+			background-color: #F2F2F2;
+			padding: 35px;
+			box-sizing: border-box; /*(技巧) 因为padding会造成影响，所以这句的作用是 无论padding多大， padding+width == 设置的witdh，height同理，不会影响其他的元素
+			比如没有这句话，其他元素都被它撑大！    */
+		}
+		.photo .side-front{}
+		.photo .side-front .image{
+			width: 100%;
+			height: 250px;
+			overflow: hidden;
+			/*line-height: 250px;*/
+		}
+		.photo .side-front .image img{
+			width: 100%;
+		}
+		.photo .side-front .picTitle{
+			text-align: center;
+			font-weight: bold;
+		}
+		.photo .side-back{}
+		.photo .side-back .arcs{
+			font-size: 16px;
+			color: #666;
+			line-height: 1.5em;
+		}
+		.center{
+			z-index: 999;
+		/*	left: 50%;
+			top: 50%;
+			margin: -170px 0 0 -140px; */
+		}/*整体居中其实和垂直居中类似！left top 都50%，margin-top 和 maigin-left都是 -1/2 * width/height*/
+
+		/*下面是3D旋转模块*/
+		.photo-doRotate{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			transition:all 1.5s;
+			-webkit-transform-style: preserve-3d;
+			-moz-transform-style: preserve-3d;
+			/*preserve-3d的作用： 使其子元素有3D转换效果！孙元素不行！因为photo-doRotate 这个元素会进行3D转换，也就带动着其子元素进行了3D转换，从而隐藏正面或反面*/
+			/*其实就是 让它的子元素把它当作一个三维空间来旋转！*/
+		}
+		.photo-doRotate .side-front{
+			-moz-transform:rotateY(0deg);
+			-webkit-transform:rotateY(0deg);
+			-o-transform:rotateY(0deg);
+			-ms-transform:rotateY(0deg);
+		}
+		.photo-doRotate .side-back{
+			-moz-transform:rotateY(180deg);
+			-webkit-transform:rotateY(180deg);
+			-o-transform:rotateY(180deg);
+			-ms-transform:rotateY(180deg);
+		}
+		.photo-doRotate .side{
+			-webkit-backface-visibility: hidden;
+			-moz-backface-visibility: hidden;
+			/*如果元素不面向屏幕就隐藏！也就是rotateY(180deg)隐藏*/
+		}
+		.wrap-front .photo-doRotate{
+			-moz-transform:rotateY(0deg);
+			-webkit-transform:rotateY(0deg);
+		}
+		.wrap-back .photo-doRotate{
+			-moz-transform:rotateY(180deg);
+			-webkit-transform:rotateY(180deg);			
+		}
+		.picTitle{
+			margin-top: 15px;
+		}
+		/*点击框*/
+		#clickLine{
+			width: 25%;
+			height: 5%;
+			position: absolute;
+			left: 50%;
+			margin-left: -12.5%;
+			top: 80%;
+			z-index: 999;
+		}
+		#clickLine div{
+			border-radius: 100px;
+			width: 4%;
+			height: 43%;
+			float: left;
+			background: #666;
+			margin: 0 3% 0 2%;
+			cursor: pointer;
+			margin-top: 10px;
+			position: relative;
+			left: 3%;
+			/*transition: all 1s;*/
+		}
+		.isBig{
+		}
+	</style>
+	 <script type="text/javascript" src='rAF.js'></script>
+	<script type="text/javascript" src='data.js'></script>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src='photoWall.js'></script>
+</head>
+<body>
+<div class="wall">
+	<div class="photo">
+		<div class="photo-doRotate" id="index">
+			<div class="side side-front">
+				<p class="image"><img src="#"></p>
+				<p class="picTitle"></p>
+			</div>
+			<div class="side side-back">
+				<p class="arcs"></p>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="clickLine">
+	<div id="click_1"></div>
+	<div id="click_2"></div>
+	<div id="click_3"></div>
+	<div id="click_4"></div>
+	<div id="click_5"></div>
+	<div id="click_6"></div>
+	<div id="click_7"></div>
+	<div id="click_8"></div>
+	<div id="click_9"></div>
+	<div id="click_10"></div>
+</div>
+</body>
+</html>
